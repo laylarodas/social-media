@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, Navigate, Link } from 'react-router-dom'
 import { PublicLayout } from '../components/layout/public/PublicLayout'
 import { Login } from '../components/user/Login'
 import { Register } from '../components/user/Register'
@@ -20,6 +20,15 @@ export const Routing = () => {
             <Route path='feed' element={<Feed/>} />
 
         </Route>
+
+        <Route path='*' element={
+            <>
+                <p>
+                    <h1>Not Found</h1>
+                    <Link to='/'>Go to Home</Link>
+                </p>
+            </>
+        } />
       </Routes>
     </BrowserRouter>
   )
