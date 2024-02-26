@@ -2,11 +2,14 @@ import React from 'react'
 import { useForm } from '../../hooks/useForm'
 import { Global } from '../../helpers/Global'
 import { useState } from 'react'
+import useAuth from '../../hooks/useAuth'
 
 export const Login = () => {
 
   const { form, handleInputChange } = useForm({});
   const [saved, setSaved] = useState("not_sent");
+
+  const {setAuth}= useAuth();
 
   const loginUser = async (e) => {
     e.preventDefault();
@@ -27,7 +30,21 @@ export const Login = () => {
 
       localStorage.setItem("token", response.token);
       localStorage.setItem("user", JSON.stringify(response.user));
+
+
       setSaved("login");
+      //set data in auth
+      setAuth(response.user);
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+
+
+
+
+
+
     } else {
       setSaved("error");
     }
@@ -41,7 +58,7 @@ export const Login = () => {
       <div className="content__posts">
 
         {
-          saved === "saved" ? <strong className='message__success'>User loged</strong> :
+          saved === "login" ? <strong className='message__success'>User loged</strong> :
             saved === "error" ? <strong className='message__error'>User not loged</strong> : ""
         }
 
