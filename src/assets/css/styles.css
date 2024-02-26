@@ -188,6 +188,31 @@ body {
 }
 
 
+/* styles Register */
+
+.message__success,
+.message__error{
+    width: 20%;
+    display: block;
+    padding: 5px;
+    margin-bottom: 15px;
+    border-radius: 3px;
+    text-align: center;
+    
+}
+.message__success{
+    background:#5cb85c;
+    color: white;
+    border: 1px solid #4cae4c;
+}
+
+.message__error{
+    background: #d9534f;
+    color: white;
+    border: 1px solid #d43f3a;
+}
+
+
 .posts__post{
     width: 100%;
     display: flex;

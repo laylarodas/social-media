@@ -38,9 +38,10 @@ export const Register = () => {
       </header>
 
       <div className="content__posts">
-
-        <strong className='alert alert-success'>{saved === "saved" ? "User saved" : ""}</strong>
-        <strong className='alert alert-danger'>{saved === "error" ? "User not saved": ""}</strong>
+        {
+          saved === "saved" ? <strong className='message__success'>User saved</strong> :
+          saved === "error" ?  <strong className='message__error'>User not saved</strong> : ""
+        }
 
         <form action="" className='register__form' onSubmit={saveUser}>
           <div className='form__group'>
