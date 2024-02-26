@@ -8,7 +8,18 @@ export const Login = () => {
       </header>
 
       <div className="content__posts">
+        <form className="login__form">
+          <div className="form__group">
+            <label htmlFor="email">Email</label>
+            <input type="email" id="email" name="email" />
+          </div>
+          <div className="form__group">
+            <label htmlFor="password">Password</label>
+            <input type="password" id="password" name="password" />
+          </div>
 
+          <input type="submit" value="Login" className="btn btn-success" />
+        </form>
       </div>
     </>
   )
