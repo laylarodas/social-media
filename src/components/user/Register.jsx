@@ -1,15 +1,34 @@
 import React from 'react'
 import { useForm } from '../../hooks/useForm'
+import {Global} from '../../helpers/Global'
+import { useState } from 'react'
 
 export const Register = () => {
 
   const {form, handleInputChange} = useForm({});
+  const [saved, setSaved] = useState("not_sent");
 
-  const saveUser = (e) => {
+  const saveUser = async (e) => {
     e.preventDefault();
-    
+
     let newUser = form;
-    console.log(newUser);
+
+    const request = await fetch(`${Global.url}user/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newUser)
+    });
+
+    const response = await request.json();
+
+    if (response.status === "success") {
+      setSaved("saved");
+    } else {
+      setSaved("error");
+    }
+
 
   }
   return (
@@ -19,6 +38,10 @@ export const Register = () => {
       </header>
 
       <div className="content__posts">
+
+        <strong className='alert alert-success'>{saved === "saved" ? "User saved" : ""}</strong>
+        <strong className='alert alert-danger'>{saved === "error" ? "User not saved": ""}</strong>
+
         <form action="" className='register__form' onSubmit={saveUser}>
           <div className='form__group'>
             <label htmlFor="name">Name</label>
