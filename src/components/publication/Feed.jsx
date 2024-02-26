@@ -6,7 +6,7 @@ export const Feed = () => {
         <>
             <header className="content__header">
                 <h1 className="content__title">Timeline</h1>
-                <button className="content__button">Mostrar nuevas</button>
+                <button className="content__button">Show news</button>
             </header>
 
             <div className="content__posts">
@@ -24,12 +24,12 @@ export const Feed = () => {
                         <div className="post__body">
 
                             <div className="post__user-info">
-                                <a href="#" className="user-info__name">Victor Robles</a>
+                                <a href="#" className="user-info__name">Layla Rodas</a>
                                 <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">Hace 1 hora</a>
+                                <a href="#" className="user-info__create-date">1 hour ago</a>
                             </div>
 
-                            <h4 className="post__content">Hola, buenos dias.</h4>
+                            <h4 className="post__content">Hello, good morning!</h4>
 
                         </div>
 
@@ -59,12 +59,12 @@ export const Feed = () => {
                         <div className="post__body">
 
                             <div className="post__user-info">
-                                <a href="#" className="user-info__name">Victor Robles</a>
+                                <a href="#" className="user-info__name">Layla Rodas</a>
                                 <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">Hace 1 hora</a>
+                                <a href="#" className="user-info__create-date">1 hour ago</a>
                             </div>
 
-                            <h4 className="post__content">Hola, buenos dias.</h4>
+                            <h4 className="post__content">Hello, good morning!.</h4>
 
                         </div>
                     </div>
@@ -93,12 +93,12 @@ export const Feed = () => {
                         <div className="post__body">
 
                             <div className="post__user-info">
-                                <a href="#" className="user-info__name">Victor Robles</a>
+                                <a href="#" className="user-info__name">Layla Rodas</a>
                                 <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">Hace 1 hora</a>
+                                <a href="#" className="user-info__create-date">1 hour ago</a>
                             </div>
 
-                            <h4 className="post__content">Hola, buenos dias.</h4>
+                            <h4 className="post__content">Hello, good morning!</h4>
 
                         </div>
                     </div>
@@ -129,12 +129,12 @@ export const Feed = () => {
                         <div className="post__body">
 
                             <div className="post__user-info">
-                                <a href="#" className="user-info__name">Victor Robles</a>
+                                <a href="#" className="user-info__name">Layla Rodas</a>
                                 <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">Hace 1 hora</a>
+                                <a href="#" className="user-info__create-date">1 hour ago</a>
                             </div>
 
-                            <h4 className="post__content">Hola, buenos dias.</h4>
+                            <h4 className="post__content">Hello, good morning.</h4>
 
                         </div>
                     </div>
@@ -154,7 +154,7 @@ export const Feed = () => {
 
             <div className="content__container-btn">
                 <button className="content__btn-more-post">
-                    Ver mas publicaciones
+                    Show more publications
                 </button>
             </div>
         </>

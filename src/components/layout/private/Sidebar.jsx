@@ -5,13 +5,13 @@ import { Global } from '../../../helpers/Global';
 
 export const Sidebar = () => {
 
-    const { auth } = useAuth();
-    console.log(auth);
+    const { auth, counters } = useAuth();
+    //console.log(auth, counters);
     return (
         <aside className="layout__aside">
 
             <header className="aside__header">
-                <h1 className="aside__title">Hola, {auth.name}</h1>
+                <h1 className="aside__title">Hello, {auth.name}</h1>
             </header>
 
             <div className="aside__container">
@@ -35,22 +35,22 @@ export const Sidebar = () => {
 
                         <div className="stats__following">
                             <a href="#" className="following__link">
-                                <span className="following__title">Siguiendo</span>
-                                <span className="following__number">10</span>
+                                <span className="following__title">Following</span>
+                                <span className="following__number">{counters.following}</span>
                             </a>
                         </div>
                         <div className="stats__following">
                             <a href="#" className="following__link">
-                                <span className="following__title">Seguidores</span>
-                                <span className="following__number">13</span>
+                                <span className="following__title">Followers</span>
+                                <span className="following__number">{counters.followers}</span>
                             </a>
                         </div>
 
 
                         <div className="stats__following">
                             <a href="#" className="following__link">
-                                <span className="following__title">Publicaciones</span>
-                                <span className="following__number">17</span>
+                                <span className="following__title">Publications</span>
+                                <span className="following__number">{counters.publications}</span>
                             </a>
                         </div>
 
@@ -64,16 +64,16 @@ export const Sidebar = () => {
                     <form className="container-form__form-post">
 
                         <div className="form-post__inputs">
-                            <label htmlFor="post" className="form-post__label">¿Que estas pesando hoy?</label>
+                            <label htmlFor="post" className="form-post__label">What are you thinking today?</label>
                             <textarea name="post" className="form-post__textarea"></textarea>
                         </div>
 
                         <div className="form-post__inputs">
-                            <label htmlFor="image" className="form-post__label">Sube tu foto</label>
+                            <label htmlFor="image" className="form-post__label">Upload your image</label>
                             <input type="file" name="image" className="form-post__image" />
                         </div>
 
-                        <input type="submit" value="Enviar" className="form-post__btn-submit" disabled />
+                        <input type="submit" value="Send" className="form-post__btn-submit" disabled />
 
                     </form>
 
