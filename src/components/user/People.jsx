@@ -8,14 +8,17 @@ export const People = () => {
 
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
+  const [more, setMore] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getUsers();
+    getUsers(1);
   }, []);
 
 
-  const getUsers = async (nextPage) => {
+  const getUsers = async (nextPage = 1) => {
 
+    setLoading(true);
     const request = await fetch(`${Global.url}user/list/${nextPage}`, {
       method: 'GET',
       headers: {
@@ -26,16 +29,24 @@ export const People = () => {
 
     const response = await request.json();
 
+    
+
     if (response.status === 'success' && response.users) {
 
       let newUsers = response.users;
 
-      if(users.length >= 1){
+      if (users.length >= 1) {
         newUsers = [...users, ...response.users];
       }
 
+
       setUsers(newUsers);
-      
+      setLoading(false);
+
+      if (users.length >=  response.total) {
+        setMore(false);
+      }
+
     }
 
 
@@ -57,6 +68,7 @@ export const People = () => {
 
       <div className="content__posts">
 
+        {loading && <p>Loading...</p>}
         {users.map((user, index) => {
 
           return (
@@ -68,7 +80,7 @@ export const People = () => {
                   <a href="#" className="post__image-link">
                     {user.image != "default.png" && <img src={Global.url + "user/avatar/" + user.image} className="post__user-image" alt="Profile Picture" />}
                     {user.image == "default.png" && <img src={avatar} className="post__user-image" alt="Foto de perfil" />}
-                  
+
                   </a>
                 </div>
 
@@ -107,12 +119,15 @@ export const People = () => {
 
 
       </div>
+      {loading && <p>Loading...</p>}
+      {more && 
+        <div className="content__container-btn">
+          <button className="content__btn-more-post" onClick={nextPage}>
+            Show more people
+          </button>
+        </div>
+      }
 
-      <div className="content__container-btn">
-        <button className="content__btn-more-post" onClick={nextPage}>
-          Show more people
-        </button>
-      </div>
       <br />
     </>
   )
