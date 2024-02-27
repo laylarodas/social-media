@@ -60,6 +60,30 @@ export const People = () => {
     getUsers(next);
   }
 
+  const follow = async (userId) => {
+
+    const request = await fetch(`${Global.url}follow/save`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')
+      },
+      body: JSON.stringify({ followed: userId })
+    });
+
+    const response = await request.json();
+    if (response.status === 'success') {
+      setFollowing([...following, userId]);
+    }
+
+
+
+  }
+
+  const unfollow = async (userId) => {
+    
+  }
+
 
   return (
     <>
@@ -104,16 +128,16 @@ export const People = () => {
               <div className="post__buttons">
 
                 {!following.includes(user._id) &&
-                  <a href="#" className="post__button post__button__green">
+                  <button className="post__button post__button__green" onClick={() => follow(user._id)}>
                     Follow
-                  </a>
+                  </button>
                 }
 
 
                 {following.includes(user._id) &&
-                  <a href="#" className="post__button">
+                  <button  className="post__button" onClick={() => unfollow(user._id)}>
                     Unfollow
-                  </a>
+                  </button>
                 }
 
 
