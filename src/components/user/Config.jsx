@@ -10,6 +10,9 @@ export const Config = () => {
 
     const updateUser = async (e) => {
         e.preventDefault();
+
+        const token = localStorage.getItem("token");
+
         let newDataUser = SerializeForm(e.target);
 
         delete newDataUser.file;
@@ -18,14 +21,14 @@ export const Config = () => {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": localStorage.getItem("token")
+                "Authorization": token
             },
             body: JSON.stringify(newDataUser)
 
         })
 
         const response = await request.json();
-        if(response.status === "success"){
+        if(response.status === "success" && response.user){
             delete response.user.password;
 
             setAuth(response.user);
@@ -33,6 +36,33 @@ export const Config = () => {
             console.log(auth)
         }else{
             setSaved("error");
+        }
+
+        const fileInput = document.querySelector('#file');
+
+        if(response.status === "success" && fileInput.files[0]){
+            const formData = new FormData();
+            formData.append('avatar', fileInput.files[0]);
+
+            const uploadRequest = await fetch(Global.url + "user/upload", {
+                method: "POST",
+                headers: {
+                    "Authorization": token
+                },
+                body: formData
+            });
+
+            const uploadData = await uploadRequest.json();
+            console.log(uploadData);
+
+            if(uploadData.status === "success" && uploadData.user){
+                delete uploadData.user.password;
+                setAuth(uploadData.user);
+                setSaved("saved");
+            }else{
+                setSaved("error");
+            
+            }
         }
     };
 
@@ -84,6 +114,7 @@ export const Config = () => {
                     </div>
                     <br />
                     <input type="submit" value="Update" className='btn btn-success' />
+                    <br />
 
                 </form>
             </div>
