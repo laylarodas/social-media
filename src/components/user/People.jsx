@@ -10,6 +10,7 @@ export const People = () => {
   const [page, setPage] = useState(1);
   const [more, setMore] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [following, setFollowing] = useState([]);
 
   useEffect(() => {
     getUsers(1);
@@ -29,7 +30,7 @@ export const People = () => {
 
     const response = await request.json();
 
-    
+
 
     if (response.status === 'success' && response.users) {
 
@@ -42,8 +43,9 @@ export const People = () => {
 
       setUsers(newUsers);
       setLoading(false);
+      setFollowing(response.userFollowing);
 
-      if (users.length >=  response.total) {
+      if (users.length >= (response.total - response.users.length)) {
         setMore(false);
       }
 
@@ -101,14 +103,21 @@ export const People = () => {
 
               <div className="post__buttons">
 
-                <a href="#" className="post__button post__button__green">
-                  Follow
-                </a>
-                {/* 
-                  <a href="#" className="post__button"> 
-                    unFollow 
+                {!following.includes(user._id) &&
+                  <a href="#" className="post__button post__button__green">
+                    Follow
                   </a>
-              */}
+                }
+
+
+                {following.includes(user._id) &&
+                  <a href="#" className="post__button">
+                    Unfollow
+                  </a>
+                }
+
+
+
 
 
               </div>
@@ -116,11 +125,9 @@ export const People = () => {
             </article>)
         })}
 
-
-
       </div>
       {loading && <p>Loading...</p>}
-      {more && 
+      {more &&
         <div className="content__container-btn">
           <button className="content__btn-more-post" onClick={nextPage}>
             Show more people
