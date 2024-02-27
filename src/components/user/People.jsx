@@ -81,7 +81,23 @@ export const People = () => {
   }
 
   const unfollow = async (userId) => {
-    
+    const request = await fetch(`${Global.url}follow/unfollow/${userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')
+      }
+    })
+
+    const response = await request.json();
+
+    if (response.status === 'success') {
+      let filterFollowings = following.filter(followingUserId => userId !== followingUserId);
+
+      setFollowing(filterFollowings);
+    }
+
+
   }
 
 
