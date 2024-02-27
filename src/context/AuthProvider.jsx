@@ -61,6 +61,7 @@ export const AuthProvider = ({children}) => {
     <AuthContext.Provider value={{
       auth,
       setAuth,
+      setCounters,
       counters,
       loading
     }}>
