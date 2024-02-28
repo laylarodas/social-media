@@ -64,6 +64,10 @@ export const Sidebar = () => {
                 setStored("error");
             }
 
+            if(uploadResponse.status === "success" && response.status == "success"){
+                const myForm = document.getElementById("publication-id");myForm.reset();
+            }
+
         }
 
     }
@@ -126,7 +130,7 @@ export const Sidebar = () => {
                     stored === "error" ? <strong className='message__error'>Not posted</strong> : ""
                 }
 
-                    <form className="container-form__form-post" onSubmit={savePost}>
+                    <form className="container-form__form-post" id='publication-id' onSubmit={savePost}>
 
                         <div className="form-post__inputs">
                             <label htmlFor="text" className="form-post__label">What are you thinking today?</label>
