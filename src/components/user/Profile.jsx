@@ -4,20 +4,32 @@ import { GetProfile } from '../../helpers/GetProfile'
 import { useParams } from 'react-router-dom'
 import { Global } from '../../helpers/Global'
 import { Link } from 'react-router-dom'
+import useAuth from '../../hooks/useAuth'
 
 export const Profile = () => {
 
     const [user, setUser] = useState({});
     const [counters, setCounters] = useState({});
     const params = useParams();
+    const {auth} = useAuth();
+    const [iFollow, setIFollow] = useState(false);
+
+
+    const getDataUser = async()=>{
+        let dataUser = await GetProfile(params.userId, setUser);
+        console.log(dataUser);
+        if(dataUser.following && dataUser.following._id){
+            setIFollow(true);
+        }
+    }
 
     useEffect(() => {
-        GetProfile(params.userId, setUser)
+        getDataUser();
         getCounters();
     }, []);
 
     useEffect(() => {
-        GetProfile(params.userId, setUser);
+        getDataUser();
         getCounters();
     }, [params]);
 
@@ -37,6 +49,44 @@ export const Profile = () => {
         }
     }
 
+    const follow = async (userId) => {
+
+        const request = await fetch(`${Global.url}follow/save`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            },
+            body: JSON.stringify({ followed: userId })
+        });
+
+        const response = await request.json();
+        if (response.status === 'success') {
+            setIFollow(true);
+        }
+
+
+
+    }
+
+    const unfollow = async (userId) => {
+        const request = await fetch(`${Global.url}follow/unfollow/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
+        })
+
+        const response = await request.json();
+
+        if (response.status === 'success') {
+            setIFollow(false);
+        }
+
+
+    }
+
     return (
         <>
 
@@ -52,7 +102,13 @@ export const Profile = () => {
                     <div className="general-info__container-names">
                         <div className="container-names__name">
                             <h1>{user.name} {user.surname}</h1>
-                            <button className="content__button content__button--right">Follow</button>
+                            {user._id != auth._id && 
+                                (iFollow ? 
+                                    <button className="content__button content__button--right post__button" onClick={() => unfollow(user._id)}>UnFollow</button>
+                                    : <button className="content__button content__button--right" onClick={() => follow(user._id)}>Follow</button>
+                                )
+                            }
+                            
                         </div>
                         <h2 className="container-names__nickname">{user.username}</h2>
                         <p className="container-names__bio">{user.bio}</p>

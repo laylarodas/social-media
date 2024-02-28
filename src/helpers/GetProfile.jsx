@@ -16,4 +16,6 @@ export const GetProfile = async (userId, setState) => {
         setState(response.user);
     }
 
+    return response;
+
 }
