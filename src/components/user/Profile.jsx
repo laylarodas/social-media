@@ -14,6 +14,8 @@ export const Profile = () => {
     const { auth } = useAuth();
     const [iFollow, setIFollow] = useState(false);
     const [publications, setPublications] = useState([]);
+    const [page, setPage] = useState(1);
+    const [more, setMore] = useState(true);
 
 
     const getDataUser = async () => {
@@ -28,13 +30,14 @@ export const Profile = () => {
     useEffect(() => {
         getDataUser();
         getCounters();
-        getPublications();
+        getPublications(1, true);
     }, []);
 
     useEffect(() => {
         getDataUser();
         getCounters();
-        getPublications();
+        setMore(true);
+        getPublications(1, true);
     }, [params]);
 
     const getCounters = async () => {
@@ -91,7 +94,7 @@ export const Profile = () => {
 
     }
 
-    const getPublications = async (nextPage = 1) => {
+    const getPublications = async (nextPage = 1, newProfile = false) => {
         const request = await fetch(Global.url + "publication/user/" + params.userId + "/" + nextPage, {
             method: "GET",
             headers: {
@@ -105,8 +108,31 @@ export const Profile = () => {
         console.log(response);
 
         if (response.status === "success") {
-            setPublications(response.publications);
+
+            let newPublications = response.publications;
+            
+            if (!newProfile && publications.length >= 1) {
+                newPublications = [...publications, ...response.publications];
+            }
+
+            if (newProfile) {
+                newPublications = response.publications;
+                setMore(true);
+                setPage(1);
+            }
+
+            setPublications(newPublications);
+
+            if (!newProfile && publications.length >= (response.total - response.publications.length)) {
+                setMore(false);
+            }
         }
+    }
+
+    const nextPage = () => {
+        let next = page + 1;
+        setPage(next);
+        getPublications(next);
     }
 
     return (
@@ -174,7 +200,7 @@ export const Profile = () => {
 
                     return (
 
-                        <article className="posts__post">
+                        <article className="posts__post" key={publication._id}>
 
                             <div className="post__container">
 
@@ -217,11 +243,16 @@ export const Profile = () => {
 
             </div>
             <br />
-            <div className="content__container-btn">
-                <button className="content__btn-more-post">
-                    Show more publications
-                </button>
-            </div>
+            {more &&
+                <div className="content__container-btn">
+                    <button className="content__btn-more-post" onClick={nextPage}>
+                        Show more publications
+                    </button>
+                </div>
+            }
+
+            <br />
+
         </>
     )
 }
