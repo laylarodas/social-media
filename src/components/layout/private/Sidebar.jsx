@@ -12,6 +12,7 @@ export const Sidebar = () => {
     const {form, handleInputChange} = useForm({});
     const [stored, setStored] = useState("not-stored");
 
+    const token = localStorage.getItem("token");
 
     const savePost = async (e) => {
         e.preventDefault();
@@ -24,7 +25,7 @@ export const Sidebar = () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": localStorage.getItem("token")
+                "Authorization": token
             },
             body: JSON.stringify(newPost)
         });
@@ -37,6 +38,34 @@ export const Sidebar = () => {
         }else{
             setStored("error");
         }
+
+        const fileInput = document.getElementById("file");
+
+        if(response.status === "success" && fileInput.files[0]){
+       
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+       
+
+            const uploadRequest = await fetch(Global.url + "publication/upload/" + response.publication._id, {
+                method: "POST",
+                headers: {
+                    "Authorization": token
+                },
+                body: formData
+            });
+
+            const uploadResponse = await uploadRequest.json();
+            console.log(response);
+
+            if(uploadResponse.status === "success"){
+                setStored("stored");
+            }else{
+                setStored("error");
+            }
+
+        }
+
     }
     return (
         <aside className="layout__aside">
