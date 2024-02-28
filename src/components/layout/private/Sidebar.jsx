@@ -64,11 +64,9 @@ export const Sidebar = () => {
                 setStored("error");
             }
 
-            if(uploadResponse.status === "success" && response.status == "success"){
-                const myForm = document.getElementById("publication-id");myForm.reset();
-            }
-
         }
+
+        const myForm = document.getElementById("publication-id");myForm.reset();
 
     }
     return (

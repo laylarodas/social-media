@@ -15,10 +15,17 @@ export const Feed = () => {
     const [more, setMore] = useState(true);
 
     useEffect(() => {
-        getPublications(1, true);
+        getPublications(1, false);
     }, []);
 
-    const getPublications = async (nextPage = 1) => {
+    const getPublications = async (nextPage = 1, showNews = false) => {
+
+        if(showNews){
+            setPublications([]);
+            setPage(1);
+            nextPage = 1;
+            
+        }
         const request = await fetch(Global.url + "publication/feed/" + nextPage, {
             method: "GET",
             headers: {
@@ -29,13 +36,12 @@ export const Feed = () => {
 
         const response = await request.json();
 
-        console.log(response);
 
         if (response.status === "success") {
 
             let newPublications = response.publications;
             
-            if (publications.length >= 1) {
+            if (!showNews && publications.length >= 1) {
                 newPublications = [...publications, ...response.publications];
             }
 
@@ -43,7 +49,7 @@ export const Feed = () => {
 
             setPublications(newPublications);
 
-            if (publications.length >= (response.total - response.publications.length)) {
+            if (!showNews && publications.length >= (response.total - response.publications.length)) {
                 setMore(false);
             }
 
@@ -57,7 +63,9 @@ export const Feed = () => {
         <>
             <header className="content__header">
                 <h1 className="content__title">Timeline</h1>
-                <button className="content__button">Show news</button>
+                <button className="content__button" onClick={() => {
+                    getPublications(1, true);
+                }}>Show news</button>
             </header>
 
             <PublicationList
