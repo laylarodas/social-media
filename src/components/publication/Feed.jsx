@@ -1,7 +1,58 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import avatar from '../../assets/img/user.png'
+import { useParams } from 'react-router-dom'
+import { Global } from '../../helpers/Global'
+import { Link } from 'react-router-dom'
+import useAuth from '../../hooks/useAuth'
+import { PublicationList } from '../publication/PublicationList'
 
 export const Feed = () => {
+
+    const params = useParams();
+    const { auth } = useAuth();
+    const [publications, setPublications] = useState([]);
+    const [page, setPage] = useState(1);
+    const [more, setMore] = useState(true);
+
+    useEffect(() => {
+        getPublications(1, true);
+    }, []);
+
+    const getPublications = async (nextPage = 1) => {
+        const request = await fetch(Global.url + "publication/feed/" + nextPage, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("token")
+            }
+        });
+
+        const response = await request.json();
+
+        console.log(response);
+
+        if (response.status === "success") {
+
+            let newPublications = response.publications;
+            
+            if (publications.length >= 1) {
+                newPublications = [...publications, ...response.publications];
+            }
+
+         
+
+            setPublications(newPublications);
+
+            if (publications.length >= (response.total - response.publications.length)) {
+                setMore(false);
+            }
+
+            if(response.pages <= 1){
+                setMore(false);
+            }
+        }
+    }
+
     return (
         <>
             <header className="content__header">
@@ -9,154 +60,14 @@ export const Feed = () => {
                 <button className="content__button">Show news</button>
             </header>
 
-            <div className="content__posts">
-
-                <div className="posts__post">
-
-                    <div className="post__container">
-
-                        <div className="post__image-user">
-                            <a href="#" className="post__image-link">
-                                <img src={avatar} className="post__user-image" alt="Foto de perfil" />
-                            </a>
-                        </div>
-
-                        <div className="post__body">
-
-                            <div className="post__user-info">
-                                <a href="#" className="user-info__name">Layla Rodas</a>
-                                <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">1 hour ago</a>
-                            </div>
-
-                            <h4 className="post__content">Hello, good morning!</h4>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="post__buttons">
-
-                        <a href="#" className="post__button">
-                            <i className="fa-solid fa-trash-can"></i>
-                        </a>
-
-                    </div>
-
-                </div>
-
-                <div className="posts__post">
-
-                    <div className="post__container">
-
-                        <div className="post__image-user">
-                            <a href="#" className="post__image-link">
-                                <img src={avatar} className="post__user-image" alt="Foto de perfil" />
-                            </a>
-                        </div>
-
-                        <div className="post__body">
-
-                            <div className="post__user-info">
-                                <a href="#" className="user-info__name">Layla Rodas</a>
-                                <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">1 hour ago</a>
-                            </div>
-
-                            <h4 className="post__content">Hello, good morning!.</h4>
-
-                        </div>
-                    </div>
-
-                    <div className="post__buttons">
-
-                        <a href="#" className="post__button">
-                            <i className="fa-solid fa-trash-can"></i>
-                        </a>
-
-                    </div>
-
-                </div>
-
-
-                <div className="posts__post">
-
-                    <div className="post__container">
-
-                        <div className="post__image-user">
-                            <a href="#" className="post__image-link">
-                                <img src={avatar} className="post__user-image" alt="Foto de perfil" />
-                            </a>
-                        </div>
-
-                        <div className="post__body">
-
-                            <div className="post__user-info">
-                                <a href="#" className="user-info__name">Layla Rodas</a>
-                                <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">1 hour ago</a>
-                            </div>
-
-                            <h4 className="post__content">Hello, good morning!</h4>
-
-                        </div>
-                    </div>
-
-                    <div className="post__buttons">
-
-                        <a href="#" className="post__button">
-                            <i className="fa-solid fa-trash-can"></i>
-                        </a>
-
-                    </div>
-
-                </div>
-
-
-
-
-                <div className="posts__post">
-
-                    <div className="post__container">
-
-                        <div className="post__image-user">
-                            <a href="#" className="post__image-link">
-                                <img src={avatar} className="post__user-image" alt="Foto de perfil" />
-                            </a>
-                        </div>
-
-                        <div className="post__body">
-
-                            <div className="post__user-info">
-                                <a href="#" className="user-info__name">Layla Rodas</a>
-                                <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">1 hour ago</a>
-                            </div>
-
-                            <h4 className="post__content">Hello, good morning.</h4>
-
-                        </div>
-                    </div>
-
-                    <div className="post__buttons">
-
-                        <a href="#" className="post__button">
-                            <i className="fa-solid fa-trash-can"></i>
-                        </a>
-
-                    </div>
-
-                </div>
-
-
-            </div>
-
-            <div className="content__container-btn">
-                <button className="content__btn-more-post">
-                    Show more publications
-                </button>
-            </div>
+            <PublicationList
+                publications={publications}
+                page={page}
+                setPage={setPage}
+                more={more}
+                setMore={setMore}
+                getPublications={getPublications} 
+            />
         </>
     )
 }
